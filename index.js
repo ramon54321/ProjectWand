@@ -13,6 +13,12 @@ import State from './State.js'
 //     }
 //   }
 
+class Renderer {
+  static render() {
+    console.log("This is the current state: " + JSON.stringify(State._state))
+  }
+}
+
 class Game {
   static modules = []
 
@@ -33,6 +39,12 @@ const mainModule = {
       const beersDrunk = State.get("beersDrunk")
       State.set("beersDrunk", beersDrunk ? beersDrunk + 1 : 1)
     })
+
+    Events.on("Render", () => {
+      Renderer.render()
+    })
+
+    State.set("currentRoom", "bar")
   }
 }
 
@@ -89,5 +101,7 @@ Events.emit("Drink")
 Events.emit("Drink")
 Events.emit("Drink")
 Events.emit("Drink")
+
+Events.emit("Render")
 
 Events.emit("Debug")
