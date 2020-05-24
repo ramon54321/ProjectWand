@@ -1,4 +1,3 @@
-
 import Events from './Events.js'
 import State from './State.js'
 
@@ -14,38 +13,73 @@ import State from './State.js'
 //     }
 //   }
 
-const addDrinkHealthListener = Events.on("Drink", () => console.log("Adding Health"))
-const addDrinkHeadacheListener = Events.on("Drink", () => console.log("Getting Headache"))
+class Game {
+  static modules = []
 
-console.log(Events.get("Drink"))
-console.log(Events.remove("Drink", addDrinkHeadacheListener))
-console.log(Events.get("Drink"))
-
-Events.on("Drink", () => {
-  const beersDrunk = State.get("beersDrunk")
-  State.set("beersDrunk", beersDrunk ? beersDrunk + 1 : 1)
-})
-
-Events.on("Drink", () => {
-  if (State.get("beersDrunk") >= 6) {
-    Events.emit("PlayerGettingTipsy", State.get("beersDrunk"))
+  static addModule(module) {
+    this.modules.push(module)
   }
-})
 
-Events.on("Drink", () => {
-  if (State.get("health") < 100) {
-    const difference = 100 - State.get("health")
-    State.set("health", State.get("health") + (difference < 15 ? difference : 15))
+  static init() {
+    this.modules.forEach(module => module.init())
   }
-})
+}
 
-Events.on("PlayerGettingTipsy", count => {
-  console.log("You probably should not drink any more... You have already had " + count + " beers!")
-})
+const mainModule = {
+  init() {
+    console.log('Main module init')
 
-Events.on("StatePathSet", (path, value) => {
-  console.log(`State change detected:\n\t${path}: ${value}`)
-})
+    Events.on("Drink", () => {
+      const beersDrunk = State.get("beersDrunk")
+      State.set("beersDrunk", beersDrunk ? beersDrunk + 1 : 1)
+    })
+  }
+}
+
+const healthModule = {
+  init() {
+    console.log('Health module init')
+
+    Events.on("Drink", () => {
+      if (State.get("beersDrunk") >= 6) {
+        Events.emit("PlayerGettingTipsy", State.get("beersDrunk"))
+      }
+    })
+    
+    Events.on("Drink", () => {
+      if (State.get("health") < 100) {
+        const difference = 100 - State.get("health")
+        State.set("health", State.get("health") + (difference < 15 ? difference : 15))
+      }
+    })
+    
+    Events.on("PlayerGettingTipsy", count => {
+      console.log("You probably should not drink any more... You have already had " + count + " beers!")
+    })
+  }
+}
+
+const debugModule = {
+  init() {
+    console.log('Debug module init')
+
+    Events.on("StatePathSet", (path, value) => {
+      console.log(`State change detected:\n\t${path}: ${value}`)
+    })
+
+    Events.on("Debug", () => {
+      console.log(State._state)
+      console.log(Events.getRegisteredEventNames())
+    })
+  }
+}
+
+Game.addModule(mainModule)
+Game.addModule(healthModule)
+Game.addModule(debugModule)
+Game.init()
+
+// Gameplay Simulation
 
 Events.emit("Drink")
 Events.emit("Drink")
@@ -56,5 +90,4 @@ Events.emit("Drink")
 Events.emit("Drink")
 Events.emit("Drink")
 
-console.log(State._state)
-console.log(Events.getRegisteredEventNames())
+Events.emit("Debug")
