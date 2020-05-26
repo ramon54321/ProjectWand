@@ -13,4 +13,8 @@ export default class Utils {
     const statePath = `locations.${location.tag}`
     State.set(statePath, location)
   }
+
+  static async loadModule(moduleName) {
+    return (await import(`./modules/${moduleName}.js`)).default
+  }
 }

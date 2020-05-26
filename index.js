@@ -1,16 +1,12 @@
 import Events from './Events.js'
 import Game from './Game.js'
-
-import CoreModule from './modules/Core.js'
-import HealthModule from './modules/Health.js'
-import RenderModule from './modules/Render.js'
-import DebugModule from './modules/Debug.js'
+import Utils from './Utils.js'
 
 const main = async () => {
-  Game.addModule(CoreModule)
-  Game.addModule(HealthModule)
-  Game.addModule(RenderModule)
-  Game.addModule(DebugModule)
+  Game.addModule(await Utils.loadModule('Core'))
+  Game.addModule(await Utils.loadModule('Health'))
+  Game.addModule(await Utils.loadModule('Render'))
+  Game.addModule(await Utils.loadModule('Debug'))
   await Game.init()
 
   // Gameplay Simulation
