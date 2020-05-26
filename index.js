@@ -65,7 +65,7 @@ const rendererModule = {
   init() {
     console.log('Renderer module init')
 
-    Events.on("Render", (path, value) => {
+    Events.on("Render", () => {
       console.log("This is the current state: " + JSON.stringify(State._state))
     })
   }
