@@ -2,9 +2,8 @@ import Events from '../Events.js'
 import State from '../State.js'
 
 export default {
+  identifier: 'Health',
   async init() {
-    console.log('Health module init')
-
     Events.on("Drink", () => {
       if (State.get("beersDrunk") >= 6) {
         Events.emit("PlayerGettingTipsy", State.get("beersDrunk"))

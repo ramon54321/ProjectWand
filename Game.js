@@ -7,6 +7,7 @@ export default class Game {
 
   static async init() {
     for(const module of this.modules) {
+      console.log(`Initializing Module: ${module.identifier}`)
       await module.init()
     }
   }

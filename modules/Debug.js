@@ -2,9 +2,8 @@ import Events from '../Events.js'
 import State from '../State.js'
 
 export default {
+  identifier: 'Debug',
   async init() {
-    console.log('Debug module init')
-
     Events.on("StatePathSet", (path, value) => {
       console.log(`State change detected:\n\t${path}: ${value}`)
     })

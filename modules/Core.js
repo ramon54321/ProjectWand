@@ -3,9 +3,8 @@ import Events from '../Events.js'
 import State from '../State.js'
 
 export default {
+  identifier: 'Core',
   async init() {
-    console.log('Main module init')
-
     Events.on("Drink", () => {
       const beersDrunk = State.get("beersDrunk")
       State.set("beersDrunk", beersDrunk ? beersDrunk + 1 : 1)
