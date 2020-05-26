@@ -1,32 +1,10 @@
 import Events from './Events.js'
 import State from './State.js'
-
-// const gameWorld = {
-//     bar: {
-//       desription: 'There is a counter in the corner, with a strange looking man cleaning glasses...',
-//       actions: [
-//         {
-//           label: 'Drink Beer',
-//           action: () => Events.emit('Drink')
-//         }
-//       ]
-//     }
-//   }
-
-class Game {
-  static modules = []
-
-  static addModule(module) {
-    this.modules.push(module)
-  }
-
-  static init() {
-    this.modules.forEach(module => module.init())
-  }
-}
+import Game from './Game.js'
+import Utils from './Utils.js'
 
 const mainModule = {
-  init() {
+  async init() {
     console.log('Main module init')
 
     Events.on("Drink", () => {
@@ -34,12 +12,15 @@ const mainModule = {
       State.set("beersDrunk", beersDrunk ? beersDrunk + 1 : 1)
     })
 
-    State.set("currentRoom", "bar")
+    const world = await Utils.loadFile('world.json')
+    world.locations.forEach(Utils.loadLocationIntoState)
+
+    State.set("currentLocation", "bar")
   }
 }
 
 const healthModule = {
-  init() {
+  async init() {
     console.log('Health module init')
 
     Events.on("Drink", () => {
@@ -62,7 +43,7 @@ const healthModule = {
 }
 
 const rendererModule = {
-  init() {
+  async init() {
     console.log('Renderer module init')
 
     Events.on("Render", () => {
@@ -72,7 +53,7 @@ const rendererModule = {
 }
 
 const debugModule = {
-  init() {
+  async init() {
     console.log('Debug module init')
 
     Events.on("StatePathSet", (path, value) => {
@@ -86,23 +67,26 @@ const debugModule = {
   }
 }
 
-Game.addModule(mainModule)
-Game.addModule(healthModule)
-Game.addModule(rendererModule)
-Game.addModule(debugModule)
-Game.init()
+const main = async () => {
+  Game.addModule(mainModule)
+  Game.addModule(healthModule)
+  Game.addModule(rendererModule)
+  Game.addModule(debugModule)
+  await Game.init()
 
-// Gameplay Simulation
+  // Gameplay Simulation
 
-Events.emit("Drink")
-Events.emit("Drink")
-Events.emit("Drink")
-Events.emit("Drink")
-Events.emit("Drink")
-Events.emit("Drink")
-Events.emit("Drink")
-Events.emit("Drink")
+  Events.emit("Drink")
+  Events.emit("Drink")
+  Events.emit("Drink")
+  Events.emit("Drink")
+  Events.emit("Drink")
+  Events.emit("Drink")
+  Events.emit("Drink")
+  Events.emit("Drink")
 
-Events.emit("Render")
+  Events.emit("Render")
 
-Events.emit("Debug")
+  Events.emit("Debug")
+}
+main()
