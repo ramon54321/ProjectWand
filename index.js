@@ -13,12 +13,6 @@ import State from './State.js'
 //     }
 //   }
 
-class Renderer {
-  static render() {
-    console.log("This is the current state: " + JSON.stringify(State._state))
-  }
-}
-
 class Game {
   static modules = []
 
@@ -38,10 +32,6 @@ const mainModule = {
     Events.on("Drink", () => {
       const beersDrunk = State.get("beersDrunk")
       State.set("beersDrunk", beersDrunk ? beersDrunk + 1 : 1)
-    })
-
-    Events.on("Render", () => {
-      Renderer.render()
     })
 
     State.set("currentRoom", "bar")
@@ -71,6 +61,16 @@ const healthModule = {
   }
 }
 
+const rendererModule = {
+  init() {
+    console.log('Renderer module init')
+
+    Events.on("Render", (path, value) => {
+      console.log("This is the current state: " + JSON.stringify(State._state))
+    })
+  }
+}
+
 const debugModule = {
   init() {
     console.log('Debug module init')
@@ -88,6 +88,7 @@ const debugModule = {
 
 Game.addModule(mainModule)
 Game.addModule(healthModule)
+Game.addModule(rendererModule)
 Game.addModule(debugModule)
 Game.init()
 
