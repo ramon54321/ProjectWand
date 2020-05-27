@@ -1,8 +1,8 @@
-export default class Events {
-  static _latestId = 0
-  static bus = {}
+class EventBus {
+  _latestId = 0
+  bus = {}
 
-  static on(eventName, func) {
+  on(eventName, func) {
     const event = this.bus[eventName]
     if (!event) {
       this.bus[eventName] = {}
@@ -13,7 +13,7 @@ export default class Events {
     return id
   }
 
-  static emit(eventName, ...args) {
+  emit(eventName, ...args) {
     const event = this.bus[eventName]
     if (!event) {
       return
@@ -23,7 +23,7 @@ export default class Events {
     }
   }
 
-  static remove(eventName, id) {
+  remove(eventName, id) {
     const event = this.bus[eventName]
     const listener = event[id]
     if (!event || !listener) {
@@ -33,12 +33,12 @@ export default class Events {
     return true
   }
 
-  static get(eventName) {
+  get(eventName) {
     const event = this.bus[eventName]
     return event
   }
 
-  static getRegisteredEventNames() {
+  getRegisteredEventNames() {
     const eventNames = []
     for (const eventName in this.bus) {
       eventNames.push(eventName)
@@ -46,3 +46,6 @@ export default class Events {
     return eventNames
   }
 }
+
+export const Events = new EventBus()
+export const Actions = new EventBus()
