@@ -1,7 +1,6 @@
-import { Actions } from './Events.js'
+import { Actions, Events } from './Events.js'
 
 export default class Location {
-  _listeners = []
   onEnter() {
     console.log("Enter location")
   }
@@ -9,15 +8,17 @@ export default class Location {
     console.log("Exit location")
   }
   onEnterAnyLocation() {
-    this._listeners.push(Actions.on("jump", () => {
+    this.on("jump", () => {
       console.log("Jumping")
-    }))
+    })
+    this.on("goto", args => {
+      Events.emit("SetLocation", args[0])
+    })
   }
   onExitAnyLocation() {
-    this._listeners.forEach(Actions.remove)
-    this._listeners = []
+    Actions.clear()
   }
   on(action, fn) {
-    this._listeners.push(Actions.on(action, fn))
+    Actions.on(action, fn)
   }
 }

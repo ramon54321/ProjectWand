@@ -33,6 +33,10 @@ class EventBus {
     return true
   }
 
+  clear() {
+    this.bus = {}
+  }
+
   get(eventName) {
     const event = this.bus[eventName]
     return event

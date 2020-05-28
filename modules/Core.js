@@ -6,7 +6,8 @@ export default {
   identifier: 'Core',
   async init() {
     Events.on("Answer", answer => {
-      Actions.emit(answer)
+      const answerSplit = answer.split(" ")
+      Actions.emit(answerSplit[0], answerSplit.slice(1))
       Events.emit("Output")
     })
 
