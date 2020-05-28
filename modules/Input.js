@@ -9,9 +9,9 @@ export default {
       process.exit(0)
     })
 
-    Events.on("PromptRequest", () => {
-      rl.question(' -> ', answer => {
-        Events.emit("Answer", answer)
+    Events.on("Prompt", () => {
+      rl.question(' -> ', input => {
+        Events.emit("Input", input)
       })
     })
   }

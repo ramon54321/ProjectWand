@@ -6,6 +6,6 @@ const main = async () => {
   const moduleNames = (await Utils.loadFile('game.json')).modules
   await Utils.asyncMap(moduleNames, async moduleName => Game.addModule(await Utils.loadModule(moduleName)))
   await Game.init()
-  Events.emit("Output")
+  Events.emit("Prompt")
 }
 main()

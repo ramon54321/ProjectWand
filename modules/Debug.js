@@ -8,8 +8,9 @@ export default {
       console.log(`State change detected:\n\t${path}: ${value}`)
     })
 
-    Events.on("Output", () => {
-      console.log(State._state)
+    Events.on("Error", error => {
+      Events.emit("Output", error)
+      Events.emit("Output", JSON.stringify(State._state, null, 2))
     })
 
     Events.on("Debug", () => {

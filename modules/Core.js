@@ -5,10 +5,14 @@ import State from '../State.js'
 export default {
   identifier: 'Core',
   async init() {
-    Events.on("Answer", answer => {
-      const answerSplit = answer.split(" ")
-      Actions.emit(answerSplit[0], answerSplit.slice(1))
-      Events.emit("Output")
+    Events.on("Input", input => {
+      const inputSplit = input.split(" ")
+      try {
+        Actions.emit(inputSplit[0], inputSplit.slice(1))
+      } catch (error) {
+        Events.emit("Error", error)
+      }
+      setImmediate(() => Events.emit("Prompt"))
     })
 
     Events.on("SetLocation", (newLocationTag) => {
