@@ -1,0 +1,9 @@
+{
+  "modules": [
+    "Core",
+    "Health",
+    "Input",
+    "Debug",
+    "Output"
+  ]
+}
