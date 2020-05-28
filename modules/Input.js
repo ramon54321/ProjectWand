@@ -1,4 +1,4 @@
-import { Events } from '../Events.js'
+import Events from '../Events.js'
 import Readline from 'readline'
 
 export default {
@@ -10,7 +10,7 @@ export default {
     })
 
     Events.on("Prompt", () => {
-      rl.question(' -> ', input => {
+      rl.question('\n -> ', input => {
         Events.emit("Input", input)
       })
     })

@@ -1,5 +1,5 @@
 import Utils from '../Utils.js'
-import { Events, Actions } from '../Events.js'
+import Events from '../Events.js'
 import State from '../State.js'
 
 export default {
@@ -8,7 +8,8 @@ export default {
     Events.on("Input", input => {
       const inputSplit = input.split(" ")
       try {
-        Actions.emit(inputSplit[0], inputSplit.slice(1))
+        const currentLocation = State.get(`locations.${State.get("currentLocation")}`)
+        currentLocation[inputSplit[0]](inputSplit.slice(1))
       } catch (error) {
         Events.emit("Error", error)
       }
@@ -20,10 +21,8 @@ export default {
       if (currentLocationTag) {
         const currentLocation = State.get(`locations.${currentLocationTag}`)
         currentLocation.onExit()
-        currentLocation.onExitAnyLocation()
       }
       const newLocation = State.get(`locations.${newLocationTag}`)
-      newLocation.onEnterAnyLocation()
       newLocation.onEnter()
       State.set("currentLocation", newLocationTag)
     })

@@ -1,4 +1,4 @@
-import { Events } from './Events.js'
+import Events from './Events.js'
 
 export default class State {
   static _state = {}

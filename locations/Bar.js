@@ -1,4 +1,5 @@
 import Location from '../modules/Core/Location.js'
+import Events from '../Events.js'
 
 export default class Bar extends Location {
   name = 'Glorod\'s Mystic Bar'
@@ -8,10 +9,8 @@ export default class Bar extends Location {
     hearing: 'Glasses clanking and a bar man... just... speaking into thin air... as though days roll by slow'
   }
   locations = ['BackRoom']
-  onEnter() {
-    this.on("drink", () => {
-      console.log("Goin for a drink")
-      Events.emit("Drink")
-    })
+  drink() {
+    Events.emit("Output", "Goin for a drink")
+    Events.emit("Drink")
   }
 }

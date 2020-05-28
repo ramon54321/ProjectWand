@@ -1,4 +1,4 @@
-import { Events } from './Events.js'
+import Events from './Events.js'
 import Game from './Game.js'
 import Utils from './Utils.js'
 

@@ -1,4 +1,5 @@
 import Location from '../modules/Core/Location.js'
+import Events from '../Events.js'
 
 export default class BackRoom extends Location {
   name = 'Glorod\'s Back Room'
@@ -8,10 +9,8 @@ export default class BackRoom extends Location {
     hearing: 'Quiet... with just the distant low rumble of the drinkers outside the door...'
   }
   locations = ['Bar']
-  onEnter() {
-    this.on("listen", () => {
-      console.log("There are strange creeking noises coming from the walls...")
-      Events.emit("Fear", 3)
-    })
+  listen() {
+    Events.emit("Output", "There are strange creeking noises coming from the walls...")
+    Events.emit("Fear", 3)
   }
 }

@@ -1,4 +1,4 @@
-class EventBus {
+export class EventBus {
   _latestId = 0
   bus = {}
 
@@ -51,5 +51,5 @@ class EventBus {
   }
 }
 
-export const Events = new EventBus()
-export const Actions = new EventBus()
+const Events = new EventBus()
+export default Events
