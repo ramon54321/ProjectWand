@@ -8,6 +8,10 @@ export default {
       console.log(`State change detected:\n\t${path}: ${value}`)
     })
 
+    Events.on("Output", () => {
+      console.log(State._state)
+    })
+
     Events.on("Debug", () => {
       console.log(State._state)
       console.log(Events.getRegisteredEventNames())

@@ -1,28 +1,30 @@
 import Utils from '../Utils.js'
-import { Events } from '../Events.js'
+import { Events, Actions } from '../Events.js'
 import State from '../State.js'
-
-const Actions = {
-  "bar.haveDrink"() {
-    const beersDrunk = State.get("beersDrunk")
-    State.set("beersDrunk", beersDrunk ? beersDrunk + 1 : 1)
-    Events.emit("ConsumeAlcohol")
-  }
-}
 
 export default {
   identifier: 'Core',
   async init() {
     Events.on("Answer", answer => {
-      const currentLocation = State.get(`locations.${State.get('currentLocation')}`)
-      const actionTag = `${currentLocation.tag}.${currentLocation.actions[answer]}`
-      Actions[actionTag]()
+      Actions.emit(answer)
       Events.emit("Output")
     })
 
-    const world = await Utils.loadFile('world.json')
-    world.locations.forEach(Utils.loadLocationIntoState)
+    Events.on("SetLocation", (newLocationTag) => {
+      const currentLocationTag = State.get("currentLocation")
+      if (currentLocationTag) {
+        const currentLocation = State.get(`locations.${currentLocationTag}`)
+        currentLocation.onExit()
+        currentLocation.onExitAnyLocation()
+      }
+      const newLocation = State.get(`locations.${newLocationTag}`)
+      newLocation.onEnterAnyLocation()
+      newLocation.onEnter()
+      State.set("currentLocation", newLocationTag)
+    })
 
-    State.set("currentLocation", "bar")
+    await Utils.loadLocationsIntoState()
+
+    Events.emit("SetLocation", "Bar")
   }
 }
