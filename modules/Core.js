@@ -9,6 +9,7 @@ export default {
       const inputSplit = input.split(" ")
       try {
         const currentLocation = State.get(`locations.${State.get("currentLocation")}`)
+        // TODO: Perform on location, failing which perform generally or on self... combat
         currentLocation[inputSplit[0]](inputSplit.slice(1))
       } catch (error) {
         Events.emit("Error", error)
