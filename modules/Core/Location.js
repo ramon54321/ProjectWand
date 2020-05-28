@@ -1,4 +1,4 @@
-import { Actions, Events } from './Events.js'
+import { Actions, Events } from '../../Events.js'
 
 export default class Location {
   onEnter() {
