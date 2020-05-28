@@ -1,3 +1,5 @@
+import Events from "./Events.js"
+
 export default class Game {
   static modules = []
 
@@ -10,5 +12,6 @@ export default class Game {
       console.log(`Initializing Module: ${module.identifier}`)
       await module.init()
     }
+    Events.emit("ModulesLoaded")
   }
 }

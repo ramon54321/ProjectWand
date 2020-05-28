@@ -13,8 +13,8 @@ export default class Utils {
     }
   }
 
-  static async loadLocationsIntoState() {
-    const locationFiles = (await Utils.getFilesInDirectory('locations')).map(locationFile => `./locations/${locationFile}`)
+  static async loadLocationsIntoState(path) {
+    const locationFiles = (await Utils.getFilesInDirectory(path)).map(locationFile => `${path}/${locationFile}`)
     const locationModules = await Utils.asyncMap(locationFiles, async locationFile => (await import(locationFile)).default)
     locationModules.forEach(locationModule => State.set(`locations.${[locationModule.name]}`, new locationModule()))
   }

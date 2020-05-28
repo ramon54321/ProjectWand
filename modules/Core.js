@@ -27,8 +27,10 @@ export default {
       State.set("currentLocation", newLocationTag)
     })
 
-    await Utils.loadLocationsIntoState()
-
-    Events.emit("SetLocation", "Bar")
+    Events.on("ModulesLoaded", () => {
+      Events.emit("SetLocation", "Bar")
+    })
+    
+    await Utils.loadLocationsIntoState('./modules/Core/locations')
   }
 }

@@ -1,5 +1,5 @@
-import Location from '../modules/Core/Location.js'
-import Events from '../Events.js'
+import Location from '../Location.js'
+import Events from '../../../Events.js'
 
 export default class BackRoom extends Location {
   name = 'Glorod\'s Back Room'
