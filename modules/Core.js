@@ -1,6 +1,7 @@
 import Utils from '../Utils.js'
 import Events from '../Events.js'
 import State from '../State.js'
+import Location from './core/Location.js'
 
 export default {
   identifier: 'Core',
@@ -8,13 +9,19 @@ export default {
     Events.on("Input", input => {
       const inputSplit = input.split(" ")
       try {
-        const currentLocation = State.get(`locations.${State.get("currentLocation")}`)
-        // TODO: Perform on location, failing which perform generally or on self... combat
-        currentLocation[inputSplit[0]](inputSplit.slice(1))
+        const command = inputSplit[0]
+        const args = inputSplit.slice(1)
+        Events.emit("Action", command, args)
       } catch (error) {
         Events.emit("Error", error)
       }
       setImmediate(() => Events.emit("Prompt"))
+    })
+
+    Events.on("Action", (command, args) => {
+      const currentLocation = State.get(`locations.${State.get("currentLocation")}`)
+      const action = currentLocation.actionSet[command] || Location.actionSet[command]
+      action(args)
     })
 
     Events.on("SetLocation", (newLocationTag) => {

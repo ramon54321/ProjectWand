@@ -11,13 +11,19 @@ export default class BackRoom extends Location {
     hearing: 'Quiet... with just the distant low rumble of the drinkers outside the door...'
   }
   connections = ['Bar']
-  listen() {
-    super.listen()
-    Events.emit("Output", "There are strange creeking noises coming from the walls...")
-    Events.emit("Fear", 3)
+  actionSet = {
+    id: 'BackRoom',
+    listen: () => {
+      Location.actionSet.listen()
+      Events.emit("Output", "There are strange creeking noises coming from the walls...")
+      Events.emit("Fear", 3)
+    },
+    sniff: () => {
+      Location.actionSet.sniff()
+      Events.emit("Nausea", 1)
+    }
   }
-  sniff() {
-    super.sniff()
-    Events.emit("Nausea", 1)
+  onEnter() {
+    Events.emit("Output", "You enter the back room of the bar... it seems there is much to analyze here...")
   }
 }

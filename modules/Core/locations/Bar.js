@@ -11,8 +11,14 @@ export default class Bar extends Location {
     hearing: 'Glasses clanking and a bar man... just... speaking into thin air... as though days roll by slow'
   }
   connections = ['BackRoom']
-  drink() {
-    Events.emit("Output", "Goin for a drink")
-    Events.emit("Drink")
+  actionSet = {
+    id: 'Bar',
+    drink: () => {
+      Events.emit("Output", "Goin for a drink")
+      Events.emit("Drink")
+    }
+  }
+  onExit() {
+    Events.emit("Output", "You leave the alure of the bar behind...")
   }
 }
