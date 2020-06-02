@@ -1,4 +1,4 @@
-import Events from '../Events.js'
+import Events from '../../Events.js'
 import Readline from 'readline'
 
 export default {

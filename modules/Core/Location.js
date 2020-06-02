@@ -1,7 +1,7 @@
 import Events from '../../Events.js'
 import State from '../../State.js'
 import Utils from '../../Utils.js'
-import Core from '../Core.js'
+import Core from './Core.js'
 
 export default class Location {
   static actionSet = {

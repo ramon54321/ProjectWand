@@ -2,7 +2,11 @@ import * as FS from 'fs'
 
 export default class Utils {
   static async getFilesInDirectory(path) {
-    return await FS.readdirSync(path)
+    return await FS.readdirSync(path).filter(file => file.includes('.'))
+  }
+
+  static async getFoldersInDirectory(path) {
+    return await FS.readdirSync(path).filter(file => !file.includes('.'))
   }
 
   static async loadFile(path) {
@@ -13,7 +17,7 @@ export default class Utils {
   }
 
   static async loadModule(moduleName) {
-    return (await import(`./modules/${moduleName}.js`)).default
+    return (await import(`./modules/${moduleName}/${moduleName}.js`)).default
   }
 
   static async asyncMap(array, fn) {

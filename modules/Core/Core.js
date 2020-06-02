@@ -1,13 +1,13 @@
-import Utils from '../Utils.js'
-import Events from '../Events.js'
-import State from '../State.js'
-import Location from './core/Location.js'
+import Utils from '../../Utils.js'
+import Events from '../../Events.js'
+import State from '../../State.js'
+import Location from './Location.js'
 
 const identifier = 'Core'
 
 class ModuleUtils {
   static async loadLocationsIntoState(path) {
-    const locationFiles = (await Utils.getFilesInDirectory(path)).map(locationFile => `./${identifier}/locations/${locationFile}`)
+    const locationFiles = (await Utils.getFilesInDirectory(path)).map(locationFile => `./locations/${locationFile}`)
     const locationModules = await Utils.asyncMap(locationFiles, async locationFile => (await import(locationFile)).default)
     locationModules.forEach(locationModule => State.set(`${identifier}.locations.${[locationModule.name]}`, new locationModule()))
   }
