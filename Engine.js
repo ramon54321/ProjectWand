@@ -1,6 +1,6 @@
 import Events from "./Events.js"
 
-export default class Game {
+export default class Engine {
   static modules = []
 
   static addModule(module) {
