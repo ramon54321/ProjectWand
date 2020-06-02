@@ -3,8 +3,30 @@ import Events from '../Events.js'
 import State from '../State.js'
 import Location from './core/Location.js'
 
+const identifier = 'Core'
+
+class ModuleUtils {
+  static async loadLocationsIntoState(path) {
+    const locationFiles = (await Utils.getFilesInDirectory(path)).map(locationFile => `./${identifier}/locations/${locationFile}`)
+    const locationModules = await Utils.asyncMap(locationFiles, async locationFile => (await import(locationFile)).default)
+    locationModules.forEach(locationModule => State.set(`${identifier}.locations.${[locationModule.name]}`, new locationModule()))
+  }
+
+  static getLocationFromTag(locationTag) {
+    return State.get(`${identifier}.locations.${locationTag}`)
+  }
+
+  static create(itemTag, options = {}) {
+    return {
+      ...State.get(`${identifier}.items.${itemTag}`),
+      ...options
+    }
+  }
+}
+
 export default {
-  identifier: 'Core',
+  identifier: identifier,
+  moduleUtils: ModuleUtils,
   async init() {
     Events.on("Input", input => {
       const inputSplit = input.split(" ")
@@ -19,7 +41,7 @@ export default {
     })
 
     Events.on("Action", (command, args) => {
-      const currentLocation = State.get(`locations.${State.get("currentLocation")}`)
+      const currentLocation = this.moduleUtils.getLocationFromTag(State.get("currentLocationTag"))
       const doubleWordCommand = [command, args[0]].join(" ")
       const action = currentLocation.actionSet[command]
                   || Location.actionSet[command]
@@ -29,20 +51,21 @@ export default {
     })
 
     Events.on("SetLocation", (newLocationTag) => {
-      const currentLocationTag = State.get("currentLocation")
+      const currentLocationTag = State.get("currentLocationTag")
       if (currentLocationTag) {
-        const currentLocation = State.get(`locations.${currentLocationTag}`)
+        const currentLocation = this.moduleUtils.getLocationFromTag(currentLocationTag)
         currentLocation.onExit()
       }
-      const newLocation = State.get(`locations.${newLocationTag}`)
+      const newLocation = this.moduleUtils.getLocationFromTag(newLocationTag)
       newLocation.onEnter()
-      State.set("currentLocation", newLocationTag)
+      State.set("currentLocationTag", newLocationTag)
     })
 
     Events.on("ModulesLoaded", () => {
       Events.emit("SetLocation", "Bar")
     })
     
-    await Utils.loadLocationsIntoState('./modules/Core/locations')
+    await this.moduleUtils.loadLocationsIntoState(Utils.getModulePath(this.identifier, 'locations'))
+    State.set(`assets.${this.identifier}.items`, await Utils.loadFile(Utils.getModulePath(this.identifier, 'items.json')))
   }
 }

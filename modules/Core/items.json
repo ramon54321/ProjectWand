@@ -1,0 +1,26 @@
+{
+  "bones": {
+    "displayName": "Old Bones",
+    "weight": 6
+  },
+  "sword": {
+    "displayName": "Long Iron Sword",
+    "weight": 11,
+    "damage": 4
+  },
+  "skeleton": {
+    "displayName": "Skeleton",
+    "health": 100,
+    "weaponTag": "dagger",
+    "lootTable": [
+      {
+        "itemTag": "bones",
+        "chance": 0.95
+      },
+      {
+        "itemTag": "sword",
+        "chance": 0.15
+      }
+    ]
+  }
+}

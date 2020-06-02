@@ -1,4 +1,3 @@
-import State from './State.js'
 import * as FS from 'fs'
 
 export default class Utils {
@@ -11,12 +10,6 @@ export default class Utils {
     if (fileContents) {
       return JSON.parse(fileContents)
     }
-  }
-
-  static async loadLocationsIntoState(path) {
-    const locationFiles = (await Utils.getFilesInDirectory(path)).map(locationFile => `${path}/${locationFile}`)
-    const locationModules = await Utils.asyncMap(locationFiles, async locationFile => (await import(locationFile)).default)
-    locationModules.forEach(locationModule => State.set(`locations.${[locationModule.name]}`, new locationModule()))
   }
 
   static async loadModule(moduleName) {
@@ -38,5 +31,9 @@ export default class Utils {
     const length = options.length
     const index = Math.floor(Math.random() * length)
     return options[index]
+  }
+
+  static getModulePath(moduleIdentifier, subpath = '') {
+    return `./modules/${moduleIdentifier}/${subpath}`
   }
 }

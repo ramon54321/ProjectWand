@@ -1,6 +1,7 @@
 import Events from '../../Events.js'
 import State from '../../State.js'
 import Utils from '../../Utils.js'
+import Core from '../Core.js'
 
 export default class Location {
   static actionSet = {
@@ -10,7 +11,7 @@ export default class Location {
     },
     goto: (args) => {
       const destination = args[0]
-      const currentLocation = State.get(`locations.${State.get("currentLocation")}`)
+      const currentLocation = Core.moduleUtils.getLocationFromTag(State.get("currentLocationTag"))
       const location = currentLocation.connections.map(connection => State.get(`locations.${connection}`))
                                     .find(location => location.aliases.includes(destination))
       if (!location) {
@@ -21,15 +22,15 @@ export default class Location {
       Events.emit("SetLocation", location.tag)
     },
     observe: () => {
-      const currentLocation = State.get(`locations.${State.get("currentLocation")}`)
+      const currentLocation = Core.moduleUtils.getLocationFromTag(State.get("currentLocationTag"))
       Events.emit("Output", Utils.getFromOptions(currentLocation.description.sight))
     },
     listen: () => {
-      const currentLocation = State.get(`locations.${State.get("currentLocation")}`)
+      const currentLocation = Core.moduleUtils.getLocationFromTag(State.get("currentLocationTag"))
       Events.emit("Output", Utils.getFromOptions(currentLocation.description.hearing))
     },
     sniff: () => {
-      const currentLocation = State.get(`locations.${State.get("currentLocation")}`)
+      const currentLocation = Core.moduleUtils.getLocationFromTag(State.get("currentLocationTag"))
       Events.emit("Output", Utils.getFromOptions(currentLocation.description.smell))
     },
     analyze: () => {
