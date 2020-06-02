@@ -1,5 +1,6 @@
 import Events from '../../Events.js'
 import State from '../../State.js'
+import Utils from '../../Utils.js'
 
 export default class Location {
   static actionSet = {
@@ -21,15 +22,15 @@ export default class Location {
     },
     observe: () => {
       const currentLocation = State.get(`locations.${State.get("currentLocation")}`)
-      Events.emit("Output", currentLocation.description.sight)
+      Events.emit("Output", Utils.getFromOptions(currentLocation.description.sight))
     },
     listen: () => {
       const currentLocation = State.get(`locations.${State.get("currentLocation")}`)
-      Events.emit("Output", currentLocation.description.hearing)
+      Events.emit("Output", Utils.getFromOptions(currentLocation.description.hearing))
     },
     sniff: () => {
       const currentLocation = State.get(`locations.${State.get("currentLocation")}`)
-      Events.emit("Output", currentLocation.description.smell)
+      Events.emit("Output", Utils.getFromOptions(currentLocation.description.smell))
     },
     analyze: () => {
       Events.emit("Action", "observe")

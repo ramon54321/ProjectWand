@@ -30,4 +30,13 @@ export default class Utils {
     }
     return result
   }
+
+  static getFromOptions(options) {
+    if (typeof options !== "array") {
+      return options
+    }
+    const length = options.length
+    const index = Math.floor(Math.random() * length)
+    return options[index]
+  }
 }

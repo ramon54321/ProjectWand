@@ -20,7 +20,11 @@ export default {
 
     Events.on("Action", (command, args) => {
       const currentLocation = State.get(`locations.${State.get("currentLocation")}`)
-      const action = currentLocation.actionSet[command] || Location.actionSet[command]
+      const doubleWordCommand = [command, args[0]].join(" ")
+      const action = currentLocation.actionSet[command]
+                  || Location.actionSet[command]
+                  || currentLocation.actionSet[doubleWordCommand]
+                  || Location.actionSet[doubleWordCommand]
       action(args)
     })
 
