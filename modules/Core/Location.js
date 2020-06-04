@@ -12,7 +12,7 @@ export default class Location {
     goto: (args) => {
       const destination = args[0]
       const currentLocation = Core.moduleUtils.getLocationFromTag(State.get("currentLocationTag"))
-      const location = currentLocation.connections.map(connection => State.get(`locations.${connection}`))
+      const location = currentLocation.connections.map(connection => State.get(`${Core.identifier}.locations.${connection}`))
                                     .find(location => location.aliases.includes(destination))
       if (!location) {
         Events.emit("Output", `Can not get to ${destination} from here... perhaps there is another way there...`)
